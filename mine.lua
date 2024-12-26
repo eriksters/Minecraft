@@ -1,7 +1,8 @@
-local length = ...
-local width = select(2, ...)
-local count = select(3, ...)
-local height = select(4, ...)
+local args = {...}
+local length = args[1]
+local width = args[2]
+local count = args[3]
+local height = args[4]
 
 if length < 2 then
     error("Length must be at least 2")
