@@ -21,7 +21,7 @@ if width < 0 then
     error("Width must be at least 0")
 end
 
-if height < 12 then
+if height < 2 then
     error("Height must be at least 1")
 end
 
@@ -88,12 +88,8 @@ moveUp()
 local row_count = 0
 while true do
     local did_tunnel_connect = false
-    
-    if row_count ~= 0 then
-        turtle.turnLeft()
-    end
 
-    for i = 0, length do
+    for i = 1, length do
         digColumn()
         moveForward()
     end
@@ -101,14 +97,14 @@ while true do
 
     if row_count ~= 0 and width > 0 then
         turtle.turnLeft()
-        for i = 0, width do
+        for i = 1, width do
             turtle.dig()
             moveForward()
             digColumn()
         end
         turtle.turnRight()
         turtle.turnRight()
-        for i = 0, width do
+        for i = 1, width do
             moveForward()
         end
         did_tunnel_connect = true
@@ -118,7 +114,7 @@ while true do
         turtle.turnRight()
     end
 
-    for i = 0, width + 1 do
+    for i = 1, width + 1 do
         turtle.dig()
         moveForward()
         digColumn()
@@ -126,26 +122,27 @@ while true do
 
     turtle.turnRight()
 
-    for i = 0, length do
+    for i = 1, length do
         if i ~= 0 then
             digColumn()
         end
         moveForward()
     end
+    digColumn()
 
     turtle.turnRight()
 
-    for i = 0, width do
+    for i = 1, width do
         turtle.dig()
         moveForward()
         digColumn()
     end
     turtle.turnRight()
     turtle.turnRight()
-    for i = 0, width do
+    for i = 1, width do
         moveForward()
     end
-    for i = 0, width + 1 do
+    for i = 1, width + 1 do
         turtle.dig()
         moveForward()
         digColumn()
