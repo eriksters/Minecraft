@@ -63,15 +63,15 @@ end
 
 function digColumn()
     turtle.digDown()
-    local moveHeight = height - 2
-    for i = 0, moveHeight do
+    local moveHeight = height - 3
+    for i = 1, moveHeight do
         turtle.digUp()
         moveUp()
     end
     if height > 2 then
         turtle.digUp()
     end
-    for i = 0, moveHeight do
+    for i = 1, moveHeight do
         moveDown()
     end
 end 
