@@ -135,7 +135,6 @@ function dirty_tunnel(l, h, current_column)
         if block_count ~= 0 then
             turtle.dig()
             turtle.digUp()
-            turtle.digDown()
             moveForward()
         end
 
