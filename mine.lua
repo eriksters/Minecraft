@@ -129,6 +129,9 @@ function tunnel(l, h)
                 turtle.digUp()
                 moveUp()
             end
+            if l > 2 then
+                turtle.digUp()
+            end
             pos = "up"
         end
         block_count = block_count + 1
