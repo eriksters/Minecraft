@@ -107,7 +107,7 @@ end
 function tunnel(l, h)
     local moveHeight = h - 3
     local block_count = 0
-    local pos = "up"                -- up, down
+    local pos = "down"                -- up, down
 
     while block_count < l do
         if block_count ~= 0 then
