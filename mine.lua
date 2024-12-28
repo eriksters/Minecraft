@@ -1,4 +1,5 @@
 local MAX_MOVE_RETRIES = 10
+local CHEST_SLOT = 16
 
 local args = {...}
 local length = args[1]
@@ -34,6 +35,7 @@ function moveUp()
         local success, result = turtle.up()
         if success then
             y = y + 1
+            print("I am at: " .. x .. ", " .. y .. ", " .. z)
             return
         else
             turtle.digUp()
@@ -48,6 +50,7 @@ function moveDown()
         local success, result = turtle.down()
         if success then
             y = y - 1
+            print("I am at: " .. x .. ", " .. y .. ", " .. z)
             return
         else
             turtle.digDown()
@@ -70,6 +73,7 @@ function moveForward()
             elseif direction == 3 then
                 z = z - 1
             end
+            print("I am at: " .. x .. ", " .. y .. ", " .. z)
             return
         else
             turtle.dig()
@@ -164,9 +168,31 @@ function tunnel(t)
     end
 end
 
+function inventoryCheck()
+    local free_slots = 0
+    for i = 1, 15 do
+        if turtle.getItemCount(i) == 0 then
+            free_slots = free_slots + 1
+        end
+    end
+    print("I have " .. free_slots .. " free slots")
+    if free_slots == 0 then
+        turtle.select(CHEST_SLOT)
+        turtle.placeDown()
+        for i = 1, 15 do
+            turtle.select(i)
+            item_count = turtle.getItemCount(i)
+            if item_count > 0 then
+                turtle.dropDown(item_count)
+            end
+        end
+    end
+end
+
 --[[
     STARTUP
 ]]
+print("I am at: " .. x .. ", " .. y .. ", " .. z)
 turtle.digUp()
 moveUp()
 
@@ -176,11 +202,9 @@ moveUp()
 local row_count = 0
 while true do
     local did_tunnel_connect = false
-    print("I am at: " .. x .. ", " .. y .. ", " .. z)
 
     -- Bottom Left, tunnel
     tunnel{length, height}
-    print("I am at: " .. x .. ", " .. y .. ", " .. z)
 
     -- Top Left, gap connect
     if row_count ~= 0 and width > 0 then
@@ -193,18 +217,15 @@ while true do
         end
         did_tunnel_connect = true
     end
-    print("I am at: " .. x .. ", " .. y .. ", " .. z)
     -- Top Left, gap
     if not did_tunnel_connect then
         turnRight()
     end
     tunnel{width + 2, height, false}
-    print("I am at: " .. x .. ", " .. y .. ", " .. z)
     
     -- Top Right, tunnel
     turnRight()
     tunnel{length, height, false}
-    print("I am at: " .. x .. ", " .. y .. ", " .. z)
 
     -- Bottom Right, gap connect
     turnRight()
@@ -214,7 +235,9 @@ while true do
     for i = 1, width do
         moveForward()
     end
-    print("I am at: " .. x .. ", " .. y .. ", " .. z)
+
+    -- Inventory check
+    inventoryCheck()
 
     -- Bottom Right, gap
     tunnel{width + 2, height, false}
@@ -223,6 +246,5 @@ while true do
 
     row_count = row_count + 1
 
-    print("I am at: " .. x .. ", " .. y .. ", " .. z)
 end
 
