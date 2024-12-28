@@ -122,6 +122,7 @@ function tunnel(l, h)
                 turtle.digDown()
                 moveDown()
             end
+            turtle.digDown()
             pos = "down"
         elseif pos == "down" then
             turtle.digDown()
