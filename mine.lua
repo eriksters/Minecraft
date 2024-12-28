@@ -1,10 +1,18 @@
 local MAX_MOVE_RETRIES = 10
 local CHEST_SLOT = 16
 
+--[[
+    ARGUMENTS
+    length: length of the tunnel
+    width: width of the gap
+    height: height of the tunnel
+    dig_type: how strictly to ensure that every block is dug (clean / dirty)
+]]
 local args = {...}
 local length = args[1]
 local width = args[2]
 local height = args[3]
+local dig_type = args[4]
 
 local direction = 0 -- 0: x+, 1: z+, 2: x-, 3: z-
 local x = 0
@@ -13,6 +21,7 @@ local y = 0
 if length == nil then length = 2 end
 if width == nil then width = 0 end
 if height == nil then height = 2 end
+if dig_type == nil then dig_type = "clean" end
 
 length = math.floor(length)
 width = math.floor(width)
@@ -29,6 +38,11 @@ end
 if height < 2 then
     error("Height must be at least 1")
 end
+
+if dig_type ~= "clean" and dig_type ~= "dirty" then
+    error("dig_type must be either 'clean' or 'dirty'")
+end
+
 
 function moveUp()
     for i = 1, MAX_MOVE_RETRIES do
@@ -108,18 +122,68 @@ function digColumn()
     end
 end
 
---[[
-    Digs a tunnel of length l and height h
-    (optional) current_column: if true, dig the current column, otherwise start with the next. Default is true.
-]]
-function tunnel(t)
-    -- Handle arguments
-    setmetatable(t,{__index={current_column=true}})
-    local l, h, current_column =
-        t[1] or t.a, 
-        t[2] or t.b,
-        t[3] or t.c
-    
+function dirty_tunnel(l, h, current_column)
+    -- Function setup
+    local moveHeight = h - 3
+    local block_count = 0
+    local pos = "down"         -- up / down
+
+    -- Dig the tunnel
+    while block_count < l do
+        local dirty_block = false
+        -- Go forward if not the first block
+        if block_count ~= 0 then
+            turtle.dig()
+            turtle.digUp()
+            turtle.digDown()
+            moveForward()
+        end
+
+        if block_count + 1 ~= l then
+            turtle.dig()
+            turtle.digUp()
+            turtle.digDown()
+            moveForward()
+            dirty_block = true
+        end
+
+        -- Dig upwards if currently on the bottom
+        if pos == "down" then
+            if (current_column and block_count == 0) or block_count ~= 0 then
+                turtle.digDown()
+                for i = 1, moveHeight do
+                    turtle.dig()
+                    turtle.digUp()
+                    moveUp()
+                end
+                turtle.digUp()
+                pos = "up"
+            end
+
+        -- Dig downwards if currently on the top
+        elseif pos == "up" then
+            turtle.digUp()
+            for i = 1, moveHeight do
+                turtle.dig()
+                turtle.digDown()
+                moveDown()
+            end
+            turtle.digDown()
+            pos = "down"
+        end
+        block_count = block_count + 1
+        if dirty_block then
+            block_count = block_count + 1
+        end
+    end
+    if pos == "up" then
+        for i = 1, moveHeight do
+            moveDown()
+        end
+    end
+end
+
+function clean_tunnel(l, h, current_column)
     -- Function setup
     local moveHeight = h - 3
     local block_count = 0
@@ -168,6 +232,24 @@ function tunnel(t)
     end
 end
 
+--[[
+    Digs a tunnel of length l and height h
+    (optional) current_column: if true, dig the current column, otherwise start with the next. Default is true.
+]]
+function tunnel(t)
+    -- Handle arguments
+    setmetatable(t,{__index={current_column=true}})
+    local l, h, current_column =
+        t[1] or t.a, 
+        t[2] or t.b,
+        t[3] or t.current_column
+    if dig_type == "dirty" then
+        dirty_tunnel(l, h, current_column)
+    else
+        clean_tunnel(l, h, current_column)
+    end
+end
+
 function inventoryCheck()
     local free_slots = 0
     for i = 1, 15 do
@@ -204,7 +286,7 @@ while true do
     local did_tunnel_connect = false
 
     -- Bottom Left, tunnel
-    tunnel{length, height}
+    tunnel{length, height, true}
 
     -- Top Left, gap connect
     if row_count ~= 0 and width > 0 then
