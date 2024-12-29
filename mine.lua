@@ -1,4 +1,4 @@
--- VERSION 2.0.0.3
+-- VERSION 2.0.0.4
 
 local MAX_MOVE_RETRIES = 10
 local CHEST_SLOT = 16
