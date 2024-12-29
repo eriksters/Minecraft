@@ -306,26 +306,30 @@ while true do
     if not did_tunnel_connect then
         turnRight()
     end
-    tunnel(width + 2, height, false)
+    tunnel(width + 1, height, false)
     
     -- Top Right, tunnel
     turnRight()
     tunnel(length, height, false)
 
     -- Bottom Right, gap connect
-    turnRight()
-    tunnel(width, height, false)
-    turnRight()
-    turnRight()
-    for i = 1, width do
-        moveForward()
+    if width > 0 then
+        turnRight()
+        tunnel(width + 1, height, false)
+        turnRight()
+        turnRight()
+        for i = 1, width do
+            moveForward()
+        end
+    else
+        turnLeft()
     end
 
     -- Inventory check
     inventoryCheck()
 
     -- Bottom Right, gap
-    tunnel(width + 2, height, false)
+    tunnel(width + 1, height, false)
 
     turnLeft()
 
