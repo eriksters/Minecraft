@@ -1,3 +1,5 @@
+local MAX_MOVE_RETRIES = 16
+
 local args = {...}
 local depth = args[1]
 
