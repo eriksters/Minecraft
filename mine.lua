@@ -233,15 +233,10 @@ end
 
 --[[
     Digs a tunnel of length l and height h
-    (optional) current_column: if true, dig the current column, otherwise start with the next. Default is true.
+    current_column: if true, dig the current column, otherwise start with the next.
 ]]
-function tunnel(t)
-    -- Handle arguments
-    setmetatable(t,{__index={current_column=true}})
-    local l, h, current_column =
-        t[1] or t.a, 
-        t[2] or t.b,
-        t[3] or t.current_column
+function tunnel(l, h, current_column)
+    print("Digging tunnel of length " .. l .. " and height " .. h .. " with current_column " .. current_column)
     if dig_type == "dirty" then
         dirty_tunnel(l, h, current_column)
     else
@@ -285,12 +280,12 @@ while true do
     local did_tunnel_connect = false
 
     -- Bottom Left, tunnel
-    tunnel{length, height, true}
+    tunnel(length, height, row_count == 0)
 
     -- Top Left, gap connect
     if row_count ~= 0 and width > 0 then
         turnLeft()
-        tunnel{width + 1, height, row_count == 0}
+        tunnel(width + 1, height, false)
         turnRight()
         turnRight()
         for i = 1, width do
@@ -302,15 +297,15 @@ while true do
     if not did_tunnel_connect then
         turnRight()
     end
-    tunnel{width + 2, height, false}
+    tunnel(width + 2, height, false)
     
     -- Top Right, tunnel
     turnRight()
-    tunnel{length, height, false}
+    tunnel(length, height, false)
 
     -- Bottom Right, gap connect
     turnRight()
-    tunnel{width + 1, height, false}
+    tunnel(width + 1, height, false)
     turnRight()
     turnRight()
     for i = 1, width do
@@ -321,7 +316,7 @@ while true do
     inventoryCheck()
 
     -- Bottom Right, gap
-    tunnel{width + 2, height, false}
+    tunnel(width + 2, height, false)
 
     turnLeft()
 
