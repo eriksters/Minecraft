@@ -133,7 +133,8 @@ function dirty_tunnel(l, h, current_column)
     -- Dig the tunnel
     while block_count < l do
         -- Go forward if not the first block
-        if not (current_column and block_count == 0) then
+        local skip_this_column = block_count == 0 and not current_column
+        if skip_this_column then
             print("Skipping first column")
             turtle.dig()
             moveForward()
