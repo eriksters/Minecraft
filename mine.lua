@@ -1,4 +1,4 @@
--- VERSION 2.0.0.2
+-- VERSION 2.0.0.3
 
 local MAX_MOVE_RETRIES = 10
 local CHEST_SLOT = 16
@@ -279,6 +279,9 @@ end
 ]]
 print("I am at: " .. x .. ", " .. y .. ", " .. z)
 turtle.digUp()
+if length > 0 then
+    turtle.dig()
+end
 moveUp()
 
 --[[
@@ -310,6 +313,9 @@ while true do
     
     -- Top Right, tunnel
     turnRight()
+    if dig_type == "dirty" then
+        inventoryCheck()
+    end
     tunnel(length, height, false)
 
     -- Bottom Right, gap connect
