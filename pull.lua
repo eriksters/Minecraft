@@ -11,6 +11,6 @@ end
 for _, file in ipairs(files) do
     local file_name = string.match(file, "[^/]+$")
     file_name = string.match(file_name, "(.+)%.")
-    shell.run("rm " .. file_name .. ".lua")
+    shell.run("rm " .. file_name)
     shell.run("wget " .. file .. " " .. file_name)
 end
