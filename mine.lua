@@ -263,6 +263,7 @@ function inventoryCheck()
     print("I have " .. free_slots .. " free slots")
     if free_slots == 0 then
         turtle.select(CHEST_SLOT)
+        turtle.digDown()
         turtle.placeDown()
         for i = 1, 15 do
             turtle.select(i)
