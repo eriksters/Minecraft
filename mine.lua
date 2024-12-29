@@ -132,10 +132,9 @@ function dirty_tunnel(l, h, current_column)
 
     -- Dig the tunnel
     while block_count < l do
-        local first_move = false
-        local dirty_block = false
         -- Go forward if not the first block
         if not (current_column and block_count == 0) then
+            print("Skipping first column")
             turtle.dig()
             moveForward()
             block_count = block_count + 1
@@ -165,11 +164,14 @@ function dirty_tunnel(l, h, current_column)
             turtle.digDown()
             pos = "down"
         end
+        print("Column " .. tostring(block_count) .. " of " .. tostring(l) .. " done")
 
         if block_count < l then
+            print("First forward move. Block count < l (" .. tostring(block_count) .. " < " .. tostring(l) .. ")")
             moveForward()
             block_count = block_count + 1
             if block_count < l then
+                print("Second forward move. Block count < l (" .. tostring(block_count) .. " < " .. tostring(l) .. ")")
                 turtle.dig()
                 turtle.digUp()
                 turtle.digDown()
