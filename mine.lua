@@ -135,7 +135,7 @@ function dirty_tunnel(l, h, current_column)
         local first_move = false
         local dirty_block = false
         -- Go forward if not the first block
-        if ~(current_column and block_count == 0) then
+        if not (current_column and block_count == 0) then
             turtle.dig()
             moveForward()
             block_count = block_count + 1
