@@ -314,7 +314,7 @@ while true do
 
     -- Bottom Right, gap connect
     turnRight()
-    tunnel(width + 1, height, false)
+    tunnel(width, height, false)
     turnRight()
     turnRight()
     for i = 1, width do
