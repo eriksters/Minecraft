@@ -216,7 +216,7 @@ function clean_tunnel(l, h, current_column)
                     turtle.digUp()
                     moveUp()
                 end
-                if l > 2 then
+                if h > 2 then
                     turtle.digUp()
                 end
                 pos = "up"
