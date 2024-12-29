@@ -130,34 +130,26 @@ function dirty_tunnel(l, h, current_column)
 
     -- Dig the tunnel
     while block_count < l do
+        local first_move = false
         local dirty_block = false
         -- Go forward if not the first block
-        if block_count ~= 0 then
+        if current_column and block_count == 0 then
             turtle.dig()
-            turtle.digUp()
             moveForward()
-        end
-
-        if block_count + 1 ~= l then
-            turtle.dig()
-            turtle.digUp()
-            turtle.digDown()
-            moveForward()
-            dirty_block = true
+            block_count = block_count + 1
         end
 
         -- Dig upwards if currently on the bottom
         if pos == "down" then
-            if (current_column and block_count == 0) or block_count ~= 0 then
-                turtle.digDown()
-                for i = 1, moveHeight do
-                    turtle.dig()
-                    turtle.digUp()
-                    moveUp()
-                end
+            turtle.digDown()
+            for i = 1, moveHeight do
+                turtle.dig()
                 turtle.digUp()
-                pos = "up"
+                moveUp()
             end
+            turtle.digUp()
+            turtle.dig()
+            pos = "up"
 
         -- Dig downwards if currently on the top
         elseif pos == "up" then
@@ -167,12 +159,24 @@ function dirty_tunnel(l, h, current_column)
                 turtle.digDown()
                 moveDown()
             end
+            turtle.dig()
             turtle.digDown()
             pos = "down"
         end
-        block_count = block_count + 1
-        if dirty_block then
+
+        if block_count < l then
+            moveForward()
             block_count = block_count + 1
+            if block_count < l then
+                turtle.dig()
+                turtle.digUp()
+                turtle.digDown()
+                moveForward()
+                turtle.dig()
+                turtle.digUp()
+                turtle.digDown()
+                block_count = block_count + 1
+            end
         end
     end
     if pos == "up" then
