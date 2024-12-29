@@ -1,4 +1,4 @@
--- VERSION 2.0.0.1
+-- VERSION 2.0.0.2
 
 local MAX_MOVE_RETRIES = 10
 local CHEST_SLOT = 16
@@ -170,12 +170,12 @@ function dirty_tunnel(l, h, current_column)
         if block_count < l then
             print("First forward move. Block count < l (" .. tostring(block_count) .. " < " .. tostring(l) .. ")")
             moveForward()
+            turtle.dig()
+            turtle.digUp()
+            turtle.digDown()
             block_count = block_count + 1
             if block_count < l then
                 print("Second forward move. Block count < l (" .. tostring(block_count) .. " < " .. tostring(l) .. ")")
-                turtle.dig()
-                turtle.digUp()
-                turtle.digDown()
                 moveForward()
                 turtle.dig()
                 turtle.digUp()
