@@ -72,5 +72,8 @@ for i = 1, depth do
     turtle.digUp()
     turtle.digDown()
     moveForward()
+    turtle.dig()
+    turtle.digUp()
+    turtle.digDown()
     moveDown()
 end
