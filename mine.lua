@@ -236,7 +236,7 @@ end
     current_column: if true, dig the current column, otherwise start with the next.
 ]]
 function tunnel(l, h, current_column)
-    print("Digging tunnel of length " .. l .. " and height " .. h .. " with current_column " .. current_column)
+    print("Digging tunnel of length " .. l .. " and height " .. h .. " with current_column " .. tostring(current_column))
     if dig_type == "dirty" then
         dirty_tunnel(l, h, current_column)
     else
